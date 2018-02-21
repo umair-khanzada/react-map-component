@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <!--load external lib-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.min.js"></script>
+</head>
+<body>
+
+<!--App render here-->
+<div id="app"></div>
+
+<script type="text/babel">
+
+    //component code
+    class MyFirstComponent extends React.Component{
+       constructor(props){
+           super(props);
+       }
+
+        render(){
+            return <div>My first custom component </div>
+        }
+    }
+
+    //react reder function.
+    ReactDOM.render(
+        <MyFirstComponent />,
+        document.getElementById('app')
+    )
+
+</script>
+</body>
+</html>
