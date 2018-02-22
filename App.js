@@ -5,24 +5,29 @@ class MapComponent extends React.Component{
     }
 
     render(){
-        const {data, cb, parentClass, childClass, specialClasses} = this.props;
-        let first = '', middle = '', last = '';
+        const {data, returnCustomElement, parentClass, parentTag: ParentTag, childClass, childTag, specialClasses} = this.props,
+            ChildTag = childTag || ParentTag == 'ul' ? 'li' : 'div';
+        let first = '', middle = '', last = '', middleIndex = Math.round(data.length / 2);
 
         return (
-            <div className={parentClass}>
+            <ParentTag className={parentClass}>
                 {
-                    data.map((o, i) => {
+                    data.map((item, index) => {
                         if(specialClasses){
-                            first = i ? '' : 'map-first-item';
-                            //middle = i ? '' : 'map-first-item';
-                            last = i == (data.length - 1) ? 'map-last-item' : '';
+                            first = index ? '' : 'map-first-item';
+                            middle = data.length > 2 && middleIndex == index ? '' : 'map-middle-item';
+                            last = data.length > 1 && index == (data.length - 1) ? 'map-last-item' : '';
                         }
-                        return (
-                            <div className={`${childClass} ${first}${middle}${last}`} key={i}>{JSON.stringify(o)}</div>
-                        )
+
+                        return returnCustomElement ?
+                            returnCustomElement(item, index, {className: `${childClass} ${first}${middle}${last}`, key: index}) :
+                            <ChildTag className={`${childClass} ${first}${middle}${last}`} key={index}>
+                                {JSON.stringify(item)}
+                            </ChildTag>
+
                     })
                 }
-            </div>
+            </ParentTag>
         )
     }
 }
@@ -30,16 +35,19 @@ class MapComponent extends React.Component{
 //map component props.
 MapComponent.propTypes = {
     data: PropTypes.array.isRequired,
-    cb: PropTypes.func, //TODO: implement cb logic.
+    returnCustomElement: PropTypes.func, //call this function in return with additional third config object argument
     parentClass: PropTypes.string, //css class applied on root/parent element of map component.
+    parentTag: PropTypes.oneOf(['div', 'ul']), //html tag for parent element;
     childClass: PropTypes.string, //css class applied on each child.
+    childTag: PropTypes.oneOf(['div', 'li', 'span']), //html tag for child element.
     specialClasses: PropTypes.bool, //ng-repeat like classes, Ex: $first, $middle and $last
 };
 
 //default props of map component.
 MapComponent.defaultProps = {
-    parentClass: 'map-parent', //defaut css class for root element.
-    childClass: 'map-item',     //defaut css class for child element.
+    parentClass: 'map-parent', //default css class for root element.
+    parentTag: 'ul', //default ul.
+    childClass: 'map-item',     //default css class for child element.
     specialClasses: false
 };
 
@@ -50,11 +58,18 @@ const data = [
     {name: 'Umair', id: 3, designation: 'Fullstack Developer'},
     {name: 'Sohaib', id: 4, designation: 'Game Developer'},
     {name: 'Someone else', id: 5, designation: 'Game Developer'}
-]
+];
+const foo = (item, index, config) => {
+    return (
+        <div>{index}</div>
+    );
+}
 
 ReactDOM.render(
     <div>
-        <MapComponent data={data}  />
+        <MapComponent data={data} returnCustomElement={foo} />
+        <MapComponent data={data} />
+        <MapComponent data={data} parentTag="div"/>
     </div>,
     document.getElementById('app')
 )
