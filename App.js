@@ -6,7 +6,7 @@ class MapComponent extends React.Component{
 
     render(){
         const {data, returnCustomElement, parentClass, parentTag: ParentTag, childClass, childTag, specialClasses} = this.props,
-            ChildTag = childTag || ParentTag == 'ul' ? 'li' : 'div';
+            ChildTag = childTag || ParentTag == 'ul' ? 'li' : ParentTag == 'tr' ? 'td' : 'div';
         let first = '', middle = '', last = '', middleIndex = Math.round(data.length / 2);
 
         return (
@@ -37,9 +37,9 @@ MapComponent.propTypes = {
     data: PropTypes.array.isRequired,
     returnCustomElement: PropTypes.func, //call this function in return with additional third config object argument
     parentClass: PropTypes.string, //css class applied on root/parent element of map component.
-    parentTag: PropTypes.oneOf(['div', 'ul']), //html tag for parent element;
+    parentTag: PropTypes.oneOf(['div', 'ul', 'tr']), //html tag for parent element;
     childClass: PropTypes.string, //css class applied on each child.
-    childTag: PropTypes.oneOf(['div', 'li', 'span']), //html tag for child element.
+    childTag: PropTypes.oneOf(['div', 'li', 'span', 'td', 'th']), //html tag for child element.
     specialClasses: PropTypes.bool, //ng-repeat like classes, Ex: $first, $middle and $last
 };
 
@@ -70,6 +70,7 @@ ReactDOM.render(
         <MapComponent data={data} returnCustomElement={foo} />
         <MapComponent data={data} />
         <MapComponent data={data} parentTag="div"/>
+        <MapComponent data={data} parentTag="tr"/>
     </div>,
     document.getElementById('app')
 )
