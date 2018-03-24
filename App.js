@@ -6,7 +6,7 @@ class MapComponent extends React.Component{
 
   render(){
     const {data, returnCustomElement, parentClass, parentTag: ParentTag, childClass, childTag, specialClasses, keys} = this.props,
-        ChildTag = childTag || (ParentTag == 'ul' || ParentTag == 'ol' ? 'li' : ParentTag == 'tr' ? 'td' : 'div');
+        ChildTag = childTag || (ParentTag === 'ul' || ParentTag === 'ol' ? 'li' : ParentTag === 'tbody' || ParentTag === 'thead' ? 'tr' : 'div');
     let first = '', middle = '', last = '', middleIndex = Math.round(data.length / 2);
 
     return (
@@ -14,9 +14,9 @@ class MapComponent extends React.Component{
         {
           data.map((item, index) => {
             if(specialClasses){
-              first = index ? '' : 'map-first-item';
-              middle = data.length > 2 && middleIndex == index ? 'map-middle-item' : '';
-              last = data.length > 1 && index == (data.length - 1) ? 'map-last-item' : '';
+              first = index ? '' : '$first';
+              middle = data.length > 2 && middleIndex == index ? '$middle' : '';
+              last = data.length > 1 && index == (data.length - 1) ? '$last' : '';
             }
 
             return returnCustomElement ?
@@ -27,9 +27,8 @@ class MapComponent extends React.Component{
                 </ChildTag>
               )) :
                 <ChildTag className={`${childClass} ${first}${middle}${last}`} key={index}>
-                  {JSON.stringify(item)}
+                  {typeof item == 'object' ? JSON.stringify(item) : item}
                 </ChildTag>
-
           })
         }
       </ParentTag>
@@ -43,16 +42,16 @@ MapComponent.propTypes = {
   keys: PropTypes.arrayOf(PropTypes.string),
   returnCustomElement: PropTypes.func, //call this function in return with additional third config object argument
   parentClass: PropTypes.string, //css class applied on root/parent element of map component.
-  parentTag: PropTypes.oneOf(['div', 'ul', 'ol', 'tr']), //html tag for parent element;
+  parentTag: PropTypes.oneOf(['div', 'ul', 'ol', 'tbody', 'thead']), //html tag for parent element;
   childClass: PropTypes.string, //css class applied on each child.
-  childTag: PropTypes.oneOf(['div', 'li', 'span', 'td', 'th']), //html tag for child element.
+  childTag: PropTypes.oneOf(['div', 'li', 'span', 'tr']), //html tag for child element.
   specialClasses: PropTypes.bool, //ng-repeat like classes, Ex: $first, $middle and $last
 };
 
 //default props of map component.
 MapComponent.defaultProps = {
   parentClass: 'map-parent', //default css class for root element.
-  parentTag: 'ul', //default ul.
+  parentTag: 'div', //default div.
   childClass: 'map-item', //default css class for child element.
   specialClasses: false
 };
@@ -65,20 +64,24 @@ const exampleWithObj = [
   {name: 'Sohaib', id: 4, designation: 'Game Developer'},
   {name: 'Someone else', id: 5, designation: 'Game Developer'}
 ];
-
 const exampleWithString = ["Ovais", "Zubair", "Umair", "Sohaib", "Tariq", "Someone else"];
 const exampleWithNumber = [22, 33, 44 ,55, 66, 77, 88, 99];
-
-const foo = (item, index, config) => {
+const exampleWithCustomElement = (item, index, config) => {
   return (
-      <h1>{item}</h1>
+      <h1 key={index}>{item}</h1>
   );
 }
 
 ReactDOM.render(
     <div>
-      <MapComponent data={exampleWithNumber} specialClasses/>
-      <MapComponent data={exampleWithObj} parentTag="tr" keys={['name', 'designation']}/>
+      <h6>Example With Number</h6>
+      <MapComponent data={exampleWithNumber} parentTag="div" specialClasses/>
+      <h6>Example With String</h6>
+      <MapComponent data={exampleWithString} parentTag="ol"/>
+      <h6>Example With Object</h6>
+      <MapComponent data={exampleWithObj} parentTag="div" childTag="span" keys={['name', 'designation', 'id']}/>
+      <h6>Example With Custom element</h6>
+      <MapComponent data={exampleWithNumber} returnCustomElement={exampleWithCustomElement}/>
     </div>,
     document.getElementById('app')
 )
