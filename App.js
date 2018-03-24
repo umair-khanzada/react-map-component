@@ -6,7 +6,8 @@ class MapComponent extends React.Component{
 
   render(){
     const {data, returnCustomElement, parentClass, parentTag: ParentTag, childClass, childTag, specialClasses, keys} = this.props,
-        ChildTag = childTag || (ParentTag === 'ul' || ParentTag === 'ol' ? 'li' : ParentTag === 'tbody' || ParentTag === 'thead' ? 'tr' : 'div');
+        ChildTag = childTag || (ParentTag === 'ul' || ParentTag === 'ol' ? 'li' : ParentTag === 'tbody' || ParentTag === 'thead' ? 'tr' : 'div'),
+        GrandChild = ParentTag === 'tbody' ? 'td' : ParentTag === 'thead' ? 'th' : 'div';
     let first = '', middle = '', last = '', middleIndex = Math.round(data.length / 2);
 
     return (
@@ -21,11 +22,13 @@ class MapComponent extends React.Component{
 
             return returnCustomElement ?
               returnCustomElement(item, index, {className: `${childClass} ${first}${middle}${last}`, key: index}) :
-              keys ? keys.map((key, i) => (
-                <ChildTag className={`${childClass} ${first}${middle}${last}`} key={i}>
-                  {item[key]}
+              keys ?
+                <ChildTag className={`${childClass} ${first}${middle}${last}`} key={index}>
+                  {
+                    keys.map((key, i) => <GrandChild key={i}>{item[key]}</GrandChild>)
+                  }
                 </ChildTag>
-              )) :
+               :
                 <ChildTag className={`${childClass} ${first}${middle}${last}`} key={index}>
                   {typeof item == 'object' ? JSON.stringify(item) : item}
                 </ChildTag>
@@ -79,7 +82,9 @@ ReactDOM.render(
       <h6>Example With String</h6>
       <MapComponent data={exampleWithString} parentTag="ol"/>
       <h6>Example With Object</h6>
-      <MapComponent data={exampleWithObj} parentTag="div" childTag="span" keys={['name', 'designation', 'id']}/>
+      <table>
+        <MapComponent data={exampleWithObj} parentTag="tbody" keys={['name', 'designation', 'id']}/>
+      </table>
       <h6>Example With Custom element</h6>
       <MapComponent data={exampleWithNumber} returnCustomElement={exampleWithCustomElement}/>
     </div>,
