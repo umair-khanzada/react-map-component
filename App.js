@@ -25,7 +25,8 @@ class MapComponent extends React.Component{
               keys ?
                 <ChildTag className={`${childClass} ${first}${middle}${last}`} key={index}>
                   {
-                    keys.map((key, i) => <GrandChild key={i}>{item[key]}</GrandChild>)
+                    typeof item == 'object' ?
+                    keys.map((key, i) => <GrandChild key={i}>{item[key]}</GrandChild>) : item
                   }
                 </ChildTag>
                :
@@ -48,7 +49,7 @@ MapComponent.propTypes = {
   parentTag: PropTypes.oneOf(['div', 'ul', 'ol', 'tbody', 'thead']), //html tag for parent element;
   childClass: PropTypes.string, //css class applied on each child.
   childTag: PropTypes.oneOf(['div', 'li', 'span', 'tr']), //html tag for child element.
-  specialClasses: PropTypes.bool, //ng-repeat like classes, Ex: $first, $middle and $last
+  specialClasses: PropTypes.bool //ng-repeat like classes, Ex: $first, $middle and $last
 };
 
 //default props of map component.
