@@ -55,34 +55,11 @@ MapComponent.defaultProps = {
   handleClick: () => {}
 };
 
-//render root component.
-const exampleWithObj = [
-  {name: 'Ovais', id: 1, designation: 'Frontend Developer'},
-  {name: 'Zubair', id: 2, designation: 'UI Developer'},
-  {name: 'Umair', id: 3, designation: 'Fullstack Developer'},
-  {name: 'Sohaib', id: 4, designation: 'Game Developer'},
-  {name: 'Someone else', id: 5, designation: 'Game Developer'}
-];
-const exampleWithString = ["Ovais", "Zubair", "Umair", "Sohaib", "Tariq", "Someone else"];
-const exampleWithNumber = [22, 33, 44 ,55, 66, 77, 88, 99];
-const exampleWithCustomElement = (item, index, config) => {
-  return (
-      <h1 key={index}>{item}</h1>
-  );
-}
+
 
 ReactDOM.render(
     <div>
-      <h6>Example With Number</h6>
-      <MapComponent data={exampleWithNumber} parentTag="div" specialClasses handleClick={(item, index) => console.log("running", item, index)}/>
-      <h6>Example With String</h6>
-      <MapComponent data={exampleWithString} parentTag="ol" handleClick={(item, index) => console.log("running", item, index)}/>
-      <h6>Example With Object</h6>
-      <table>
-        <MapComponent data={exampleWithObj} parentTag="tbody" keys={['name', 'designation', 'id']} handleClick={(item, index) => console.log("running", item, index)}/>
-      </table>
-      <h6>Example With Custom element</h6>
-      <MapComponent data={exampleWithNumber} returnCustomElement={exampleWithCustomElement}/>
+      react-map-component
     </div>,
     document.getElementById('app')
 )
