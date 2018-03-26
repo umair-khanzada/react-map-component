@@ -56,10 +56,13 @@ MapComponent.defaultProps = {
 };
 
 
-
 ReactDOM.render(
-    <div>
-      react-map-component
-    </div>,
-    document.getElementById('app')
+  <div className="container">
+    <div className="row">
+      <div className="col-xs-12">
+        <h1>Temp</h1>
+      </div>
+    </div>
+  </div>,
+  document.getElementById('app')
 )
