@@ -1,5 +1,5 @@
 # react-map-component
-A reuseable dumb/presentational map component for react.js
+A reusable dumb/presentational map component for react.js
 
 ___
 
@@ -24,11 +24,13 @@ ___
 
 ```
 //simple with string.
-<MapComponent data={arrayOfString} /> 
+<MapComponent data={arrayOfString} />
+
 //with objects you need to pass some props like below.
 <table>
   <MapComponent data={arrayOfObj} keys={['id', 'name', 'gender']} />
 </table>
+
 //with custom element just pass the func no worries which type of data array contain.
 <MapComponent data={exampleWithNumber} returnCustomElement={func}/>
 ```
